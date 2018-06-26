@@ -6,7 +6,7 @@ import { formatYupError } from "../../../utils/formatYupError";
 import {
   duplicateEmail,
   emailNotLongEnough,
-  invalidEmail
+  invalidEmail,
 } from "./errorMessages";
 import { registerPasswordValidation } from "../../../yupSchemas";
 // import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
@@ -17,15 +17,16 @@ const schema = yup.object().shape({
     .string()
     .min(3, emailNotLongEnough)
     .max(255)
-    .email(invalidEmail),
-  password: registerPasswordValidation
+    .email(invalidEmail)
+    .required(),
+  password: registerPasswordValidation,
 });
 
 export const resolvers: ResolverMap = {
   Mutation: {
     register: async (
       _,
-      args: GQL.IRegisterOnMutationArguments
+      args: GQL.IRegisterOnMutationArguments,
       // { redis, url }
     ) => {
       try {
@@ -38,21 +39,21 @@ export const resolvers: ResolverMap = {
 
       const userAlreadyExists = await User.findOne({
         where: { email },
-        select: ["id"]
+        select: ["id"],
       });
 
       if (userAlreadyExists) {
         return [
           {
             path: "email",
-            message: duplicateEmail
-          }
+            message: duplicateEmail,
+          },
         ];
       }
 
       const user = User.create({
         email,
-        password
+        password,
       });
 
       await user.save();
@@ -65,6 +66,6 @@ export const resolvers: ResolverMap = {
       // }
 
       return null;
-    }
-  }
+    },
+  },
 };
