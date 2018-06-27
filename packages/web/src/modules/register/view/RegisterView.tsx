@@ -1,7 +1,14 @@
 import * as React from "react";
-import { Form, Icon, Input, Button } from "antd";
-import { withFormik, FormikErrors, FormikProps } from "formik";
-import { validUserSchema } from '@fullstack_airbnb/common';
+import { Form, Icon, Button } from "antd";
+import {
+  withFormik,
+  FormikErrors,
+  FormikProps,
+  Field,
+  Form as FForm,
+} from "formik";
+import { validUserSchema } from "@fullstack_airbnb/common";
+import { InputField } from "../../shared/InputField";
 
 const FormItem = Form.Item;
 
@@ -16,46 +23,26 @@ interface Props {
 
 class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   render() {
-    const {
-      values,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      touched,
-      errors,
-    } = this.props;
     return (
       <div style={{ display: "flex" }}>
-        <Form style={{ width: 400, margin: "auto" }} onSubmit={handleSubmit}>
-          <FormItem
-            help={touched.email && errors.email ? errors.email : ""}
-            validateStatus={touched.email && errors.email ? "error" : undefined}
-          >
-            <Input
-              name="email"
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="Email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </FormItem>
-          <FormItem
-            help={touched.password && errors.password ? errors.password : ""}
-            validateStatus={
-              touched.password && errors.password ? "error" : undefined
+        <FForm style={{ width: 400, margin: "auto" }}>
+          <Field
+            name="email"
+            placeholder="Email"
+            prefix={
+              <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} /> as any
             }
-          >
-            <Input
-              name="password"
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              type="password"
-              value={values.password}
-              placeholder="Password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </FormItem>
+            component={InputField}
+          />
+          <Field
+            name="password"
+            placeholder="Password"
+            prefix={
+              <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} /> as any
+            }
+            component={InputField}
+            type="password"
+          />
           <FormItem>
             <a className="login-form-forgot" href="">
               Forgot password
@@ -68,10 +55,10 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
               className="login-form-button"
             >
               Register
-            </Button>
+            </Button>{" "}
             Or <a href="">login now!</a>
           </FormItem>
-        </Form>
+        </FForm>
       </div>
     );
   }
