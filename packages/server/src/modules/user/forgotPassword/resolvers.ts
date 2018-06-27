@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import * as bcrypt from "bcryptjs";
+import { registerPasswordValidation } from "@fullstack_airbnb/common";
 
 import { ResolverMap } from "../../../types/graphql-utils";
 import { forgotPasswordLockAccount } from "../../../utils/forgotPasswordLockAccount";
@@ -7,14 +8,13 @@ import { createForgotPasswordLink } from "../../../utils/createForgotPasswordLin
 import { User } from "../../../entity/User";
 import { userNotFoundError, expiredKeyError } from "./errorMessages";
 import { forgotPasswordPrefix } from "../../../constants";
-import { registerPasswordValidation } from "../../../yupSchemas";
 import { formatYupError } from "../../../utils/formatYupError";
 
 // 20 minutes
 // lock account
 
 const schema = yup.object().shape({
-  newPassword: registerPasswordValidation
+  newPassword: registerPasswordValidation,
 });
 
 export const resolvers: ResolverMap = {
@@ -22,15 +22,15 @@ export const resolvers: ResolverMap = {
     sendForgotPasswordEmail: async (
       _,
       { email }: GQL.ISendForgotPasswordEmailOnMutationArguments,
-      { redis }
+      { redis },
     ) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return [
           {
             path: "email",
-            message: userNotFoundError
-          }
+            message: userNotFoundError,
+          },
         ];
       }
 
@@ -43,7 +43,7 @@ export const resolvers: ResolverMap = {
     forgotPasswordChange: async (
       _,
       { newPassword, key }: GQL.IForgotPasswordChangeOnMutationArguments,
-      { redis }
+      { redis },
     ) => {
       const redisKey = `${forgotPasswordPrefix}${key}`;
 
@@ -52,8 +52,8 @@ export const resolvers: ResolverMap = {
         return [
           {
             path: "key",
-            message: expiredKeyError
-          }
+            message: expiredKeyError,
+          },
         ];
       }
 
@@ -69,8 +69,8 @@ export const resolvers: ResolverMap = {
         { id: userId },
         {
           forgotPasswordLocked: false,
-          password: hashedPassword
-        }
+          password: hashedPassword,
+        },
       );
 
       const deleteKeyPromise = redis.del(redisKey);
@@ -78,6 +78,6 @@ export const resolvers: ResolverMap = {
       await Promise.all([updatePromise, deleteKeyPromise]);
 
       return null;
-    }
-  }
+    },
+  },
 };

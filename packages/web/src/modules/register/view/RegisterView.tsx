@@ -1,7 +1,7 @@
 import * as React from "react";
-import * as yup from "yup";
 import { Form, Icon, Input, Button } from "antd";
 import { withFormik, FormikErrors, FormikProps } from "formik";
+import { validUserSchema } from '@fullstack_airbnb/common';
 
 const FormItem = Form.Item;
 
@@ -77,26 +77,8 @@ class C extends React.PureComponent<FormikProps<FormValues> & Props> {
   }
 }
 
-const emailNotLongEnough = "Email must be atleast 3 characters long.";
-const passwordNotLongEnough = "Password must be atleast 3 characters long.";
-const invalidEmail = "Please enter a valid email.";
-
-const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .min(3, emailNotLongEnough)
-    .max(255)
-    .email(invalidEmail)
-    .required("Email is a required field."),
-  password: yup
-    .string()
-    .min(3, passwordNotLongEnough)
-    .max(255)
-    .required("Password is a required field."),
-});
-
 export default withFormik<Props, FormValues>({
-  validationSchema,
+  validationSchema: validUserSchema,
   mapPropsToValues: () => ({ email: "", password: "" }),
   handleSubmit: async (values, { setErrors, setSubmitting, props }) => {
     const errors = await props.submit(values);

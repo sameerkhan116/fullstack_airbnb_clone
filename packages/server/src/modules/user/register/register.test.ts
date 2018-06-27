@@ -1,13 +1,13 @@
 import { Connection } from "typeorm";
 import * as faker from "faker";
-
-import { User } from "../../../entity/User";
 import {
-  duplicateEmail,
   emailNotLongEnough,
   invalidEmail,
-  passwordNotLongEnough
-} from "./errorMessages";
+  passwordNotLongEnough,
+} from "@fullstack_airbnb/common";
+
+import { User } from "../../../entity/User";
+import { duplicateEmail } from "./errorMessages";
 import { TestClient } from "../../../utils/TestClient";
 import { createTestConn } from "../../../testUtils/createTestConn";
 
@@ -40,7 +40,7 @@ describe("Register user", async () => {
     expect(response2.data.register).toHaveLength(1);
     expect(response2.data.register[0]).toEqual({
       path: "email",
-      message: duplicateEmail
+      message: duplicateEmail,
     });
   });
 
@@ -50,13 +50,13 @@ describe("Register user", async () => {
       register: [
         {
           path: "email",
-          message: emailNotLongEnough
+          message: emailNotLongEnough,
         },
         {
           path: "email",
-          message: invalidEmail
-        }
-      ]
+          message: invalidEmail,
+        },
+      ],
     });
   });
 
@@ -67,9 +67,9 @@ describe("Register user", async () => {
       register: [
         {
           path: "password",
-          message: passwordNotLongEnough
-        }
-      ]
+          message: passwordNotLongEnough,
+        },
+      ],
     });
   });
 
@@ -79,17 +79,17 @@ describe("Register user", async () => {
       register: [
         {
           path: "email",
-          message: emailNotLongEnough
+          message: emailNotLongEnough,
         },
         {
           path: "email",
-          message: invalidEmail
+          message: invalidEmail,
         },
         {
           path: "password",
-          message: passwordNotLongEnough
-        }
-      ]
+          message: passwordNotLongEnough,
+        },
+      ],
     });
   });
 });
