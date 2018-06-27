@@ -1,0 +1,21 @@
+{
+  "name": "@fullstack_airbnb/controller",
+  "version": "1.0.0",
+  "main": "dist/index.d.js",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  },
+  "scripts": {
+    "build": "rm -rf ./dist && tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^10.3.6",
+    "@types/react": "^16.4.2",
+    "@types/react-dom": "^16.0.6",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "^2.9.2"
+  }
+}

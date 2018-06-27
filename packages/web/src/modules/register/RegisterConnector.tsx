@@ -1,13 +1,14 @@
 import * as React from "react";
+import { RegisterController } from "@fullstack_airbnb/controller";
+
 import RegisterView from "./view/RegisterView";
 
 export class RegisterConnector extends React.PureComponent {
-  dummySubmit = async (values: any) => {
-    console.log(values);
-    return null;
-  };
-
   render() {
-    return <RegisterView submit={this.dummySubmit} />;
+    return (
+      <RegisterController>
+        {({ submit }) => <RegisterView submit={submit} />}
+      </RegisterController>
+    );
   }
 }
