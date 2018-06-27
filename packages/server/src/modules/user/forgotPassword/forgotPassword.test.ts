@@ -1,12 +1,12 @@
 import { Connection } from "typeorm";
 import * as Redis from "ioredis";
 import * as faker from "faker";
+import { passwordNotLongEnough } from "@fullstack_airbnb/common";
 
 import { User } from "../../../entity/User";
 import { TestClient } from "../../../utils/TestClient";
 import { createForgotPasswordLink } from "../../../utils/createForgotPasswordLink";
 import { forgotPasswordLockAccount } from "../../../utils/forgotPasswordLockAccount";
-import { passwordNotLongEnough } from "../register/errorMessages";
 import { expiredKeyError } from "./errorMessages";
 import { forgotPasswordLockedError } from "../login/errorMessages";
 import { createTestConn } from "../../../testUtils/createTestConn";
@@ -24,7 +24,7 @@ beforeAll(async () => {
   const user = await User.create({
     email,
     password,
-    confirmed: true
+    confirmed: true,
   }).save();
   userId = user.id;
 });
@@ -50,10 +50,10 @@ describe("forgot password", () => {
         login: [
           {
             path: "email",
-            message: forgotPasswordLockedError
-          }
-        ]
-      }
+            message: forgotPasswordLockedError,
+          },
+        ],
+      },
     });
 
     // try changing to a password that's too short
@@ -62,36 +62,36 @@ describe("forgot password", () => {
         forgotPasswordChange: [
           {
             path: "newPassword",
-            message: passwordNotLongEnough
-          }
-        ]
-      }
+            message: passwordNotLongEnough,
+          },
+        ],
+      },
     });
 
     const response = await client.forgotPasswordChange(newPassword, key);
 
     expect(response.data).toEqual({
-      forgotPasswordChange: null
+      forgotPasswordChange: null,
     });
 
     // make sure redis key expires after password change
     expect(
-      await client.forgotPasswordChange(faker.internet.password(), key)
+      await client.forgotPasswordChange(faker.internet.password(), key),
     ).toEqual({
       data: {
         forgotPasswordChange: [
           {
             path: "key",
-            message: expiredKeyError
-          }
-        ]
-      }
+            message: expiredKeyError,
+          },
+        ],
+      },
     });
 
     expect(await client.login(email, newPassword)).toEqual({
       data: {
-        login: null
-      }
+        login: null,
+      },
     });
   });
 });

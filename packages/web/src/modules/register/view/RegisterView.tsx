@@ -72,5 +72,6 @@ export default withFormik<Props, FormValues>({
     if (errors) {
       setErrors(errors);
     }
+    setSubmitting(false);
   },
 })(C);

@@ -4,7 +4,10 @@
   "main": "dist/index.d.js",
   "license": "MIT",
   "dependencies": {
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "react": "^16.4.1",
+    "react-apollo": "^2.1.7",
     "react-dom": "^16.4.1"
   },
   "scripts": {
